@@ -40,8 +40,10 @@ struct Home : View {
                 Button(action: {}) {
                     Image("profile")
                         .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 50, height: 50)
+                        .renderingMode(.original)
+                        .frame(width: 50, height: 70)
+                        .cornerRadius(10)
+                        .shadow(color: .blue, radius: 5)
                 }
             }
             .padding()
