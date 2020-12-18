@@ -19,6 +19,58 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+struct CustomTabView : View {
+    
+    @State var selectedTab = "home"
+    
+    var body: some View {
+        
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .center)) {
+            
+            Home()
+            HStack(spacing: 0) {
+                
+                ForEach(tabs, id: \.self) { image in
+                    
+                    TabButton(image: image, selectedTab: $selectedTab)
+                    
+                    // equal spacing...
+                    
+                    if image != tabs.last {
+                        
+                        Spacer(minLength: 0)
+                    }
+                }
+            }
+            .padding(.horizontal, 25)
+            .padding(.vertical, 5)
+            .background(Color.white)
+            .clipShape(Capsule())
+            .padding(.horizontal)
+        }
+    }
+}
+
+// tabs...
+// Image Names...
+var tabs = ["home", "email", "berkas", "pengaturan"]
+
+struct TabButton : View {
+    
+    var image: String
+    @Binding var selectedTab : String
+    var body: some View{
+        
+        Button(action: {}) {
+            
+            Image(image)
+                .renderingMode(.template)
+                .foregroundColor(selectedTab == image ? Color("tab") :
+                    Color.black.opacity(0.4))
+                .padding()
+        }
+    }
+}
 struct Home : View {
     
     @State var txt = ""
@@ -106,30 +158,37 @@ struct CourseCardView : View {
         
         VStack {
             
-            Image(course.asset)
-                .resizable()
-                .renderingMode(.original)
-                .aspectRatio(contentMode: .fit)
-                .padding(.top, 10)
-                .padding(.leading, 10)
-                .background(Color(course.asset))
-            
-            HStack {
+            VStack {
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(course.name)
-                        .fontWeight(.bold)
+                Image(course.asset)
+                    .resizable()
+                    .renderingMode(.original)
+                    .aspectRatio(contentMode: .fit)
+                    .padding(.top, 10)
+                    .padding(.leading, 10)
+                    .background(Color(course.asset))
+                
+                HStack {
                     
-                    Text("\(course.numCourse) Courses")
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(course.name)
+                            .font(.title3)
+                        
+                        Text("\(course.numCourse) Courses")
+                    }
+                    .foregroundColor(.black)
+                    
+                    Spacer(minLength: 0)
                 }
-                .foregroundColor(.black)
-                
-                Spacer(minLength: 0)
+                .padding()
             }
-            .padding()
+            .background(Color.white)
+            .cornerRadius(15)
+            
+            // or you can use max height in flexible in grid item...
+            
+            Spacer(minLength: 0)
         }
-        .background(Color.white)
-        .cornerRadius(15)
     }
 }
 
