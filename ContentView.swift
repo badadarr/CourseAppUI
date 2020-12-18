@@ -40,6 +40,7 @@ struct Home : View {
                 Button(action: {}) {
                     Image("profile")
                         .resizable()
+                        .renderingMode(.original)
                         .frame(width: 50, height: 70)
                         .cornerRadius(10)
                         .shadow(color: .blue, radius: 5)
