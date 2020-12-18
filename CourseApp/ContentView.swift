@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Home()
+        CustomTabView()
     }
 }
 
@@ -25,9 +25,10 @@ struct CustomTabView : View {
     
     var body: some View {
         
-        ZStack(alignment: Alignment(horizontal: .center, vertical: .center)) {
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             
             Home()
+            
             HStack(spacing: 0) {
                 
                 ForEach(tabs, id: \.self) { image in
@@ -45,9 +46,14 @@ struct CustomTabView : View {
             .padding(.horizontal, 25)
             .padding(.vertical, 5)
             .background(Color.white)
+            .shadow(color: .blue, radius: 5, x: 5, y: 5)
+            .shadow(color: .blue, radius: 5, x: -5, y: -5)
             .clipShape(Capsule())
             .padding(.horizontal)
+            
+            // ignoring tabview elevation...
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 
@@ -61,7 +67,7 @@ struct TabButton : View {
     @Binding var selectedTab : String
     var body: some View{
         
-        Button(action: {}) {
+        Button(action: {selectedTab = image}) {
             
             Image(image)
                 .renderingMode(.template)
@@ -71,6 +77,7 @@ struct TabButton : View {
         }
     }
 }
+
 struct Home : View {
     
     @State var txt = ""
