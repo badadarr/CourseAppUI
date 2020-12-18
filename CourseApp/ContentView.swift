@@ -9,7 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        CustomTabView()
+        NavigationView {
+            
+            CustomTabView()
+                .navigationTitle("")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarHidden(true)
+        }
     }
 }
 
@@ -22,12 +28,32 @@ struct ContentView_Previews: PreviewProvider {
 struct CustomTabView : View {
     
     @State var selectedTab = "home"
+    @State var edge = UIApplication.shared.windows.first?.safeAreaInsets
     
     var body: some View {
         
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
             
-            Home()
+            // Using Tab View For Swipe Gesturess...
+            // if you dont need swipe gesture tab change means just use switch case....to switch views....
+            
+            TabView(selection: $selectedTab) {
+                
+                Home()
+                    .tag("home")
+                
+                Email()
+                    .tag("email")
+                
+                Berkas()
+                    .tag("berkas")
+                
+                Pengaturan()
+                    .tag("pengaturan")
+                    }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .ignoresSafeArea(.all, edges: .bottom)
+            // for bottom overflow...
             
             HStack(spacing: 0) {
                 
@@ -50,10 +76,15 @@ struct CustomTabView : View {
             .shadow(color: .blue, radius: 5, x: -5, y: -5)
             .clipShape(Capsule())
             .padding(.horizontal)
+            // for smaller iphones...
+            // elevations...
+            .padding(.bottom, edge!.bottom == 0 ? 20 : 0)
             
             // ignoring tabview elevation...
+            
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
+        .background(Color.black.opacity(0.05).ignoresSafeArea(.all, edges: .all))
     }
 }
 
@@ -81,6 +112,8 @@ struct TabButton : View {
 struct Home : View {
     
     @State var txt = ""
+    @State var edge = UIApplication.shared.windows.first?.safeAreaInsets
+
     var body: some View {
         
         VStack {
@@ -144,16 +177,19 @@ struct Home : View {
                         
                         ForEach(courses) { course in
                             
-                            CourseCardView(course: course)
+                            NavigationLink(destination: DetailView(course: course)) {
+                                
+                                CourseCardView(course: course)
+                            }
                             
                         }
                     }
                     .padding(.top)
                 }
                 .padding()
+                .padding(.bottom, edge!.bottom + 70)
             }
         }
-        .background(Color.black.opacity(0.05).ignoresSafeArea(.all, edges: .all))
     }
 }
 
@@ -199,6 +235,41 @@ struct CourseCardView : View {
     }
 }
 
+// tabViews...
+
+struct Email : View {
+    
+    var body: some View{
+        
+        VStack {
+            
+            Text("Email")
+        }
+    }
+}
+
+struct Berkas : View {
+    
+    var body: some View{
+        
+        VStack {
+            
+            Text("Berkas")
+        }
+    }
+}
+
+struct Pengaturan : View {
+    
+    var body: some View{
+        
+        VStack {
+            
+            Text("Pengaturan")
+        }
+    }
+}
+
 // Model Data...
 struct Course : Identifiable {
     
@@ -211,10 +282,34 @@ struct Course : Identifiable {
 // both image and color name is same so i used common word asset
 var courses = [
     
-    Course(name: "Coding", numCourse: 12, asset: "coding"),
-    Course(name: "Trading", numCourse: 12, asset: "trading"),
-    Course(name: "Cooking", numCourse: 12, asset: "cooking"),
-    Course(name: "Marketing", numCourse: 12, asset: "marketing"),
-    Course(name: "UI/UX", numCourse: 12, asset: "uiux"),
-    Course(name: "Digital Marketing", numCourse: 12, asset: "digital")
+    Course(name: "Coding", numCourse: 50, asset: "coding"),
+    Course(name: "Trading", numCourse: 26, asset: "trading"),
+    Course(name: "Cooking", numCourse: 30, asset: "cooking"),
+    Course(name: "Marketing", numCourse: 40, asset: "marketing"),
+    Course(name: "UI/UX", numCourse: 20, asset: "uiux"),
+    Course(name: "Digital Marketing", numCourse: 20, asset: "digital")
 ]
+
+
+struct DetailView : View {
+    
+    var course : Course
+    
+    var body: some View{
+        
+        VStack {
+            
+            Text(course.name)
+                .font(.title2)
+                .fontWeight(.bold)
+        }
+        .navigationTitle(course.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(trailing: Button(action: {}, label: {
+            
+            Image(systemName: "menu")
+                .renderingMode(.template)
+                .foregroundColor(.gray)
+        }))
+    }
+}
