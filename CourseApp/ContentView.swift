@@ -20,6 +20,8 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct Home : View {
+    
+    @State var txt = ""
     var body: some View {
         
         VStack {
@@ -48,7 +50,24 @@ struct Home : View {
             }
             .padding()
             
-            Spacer(minLength: 0)
+            ScrollView(.vertical, showsIndicators: false) {
+                
+                VStack {
+                    
+                    HStack(spacing: 15) {
+                        
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        
+                        TextField("Cari Kursus", text: $txt)
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal)
+                    .background(Color.white)
+                    .clipShape(Capsule())
+                }
+                .padding()
+            }
         }
         .background(Color.black.opacity(0.05).ignoresSafeArea(.all, edges: .all))
     }
