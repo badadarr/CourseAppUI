@@ -65,11 +65,71 @@ struct Home : View {
                     .padding(.horizontal)
                     .background(Color.white)
                     .clipShape(Capsule())
+                    
+                    HStack {
+                        
+                        Text("Kategori")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Spacer(minLength: 0)
+                        
+                        Button(action: {}) {
+                            Text("Lihat Semua")
+                        }
+                    }
+                    .foregroundColor(.black)
+                    .padding(.top, 25)
+                    
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 20), count: 2), spacing: 20) {
+                        
+                        ForEach(courses) { course in
+                            
+                            CourseCardView(course: course)
+                            
+                        }
+                    }
+                    .padding(.top)
                 }
                 .padding()
             }
         }
         .background(Color.black.opacity(0.05).ignoresSafeArea(.all, edges: .all))
+    }
+}
+
+struct CourseCardView : View {
+    
+    var course : Course
+    
+    var body: some View {
+        
+        VStack {
+            
+            Image(course.asset)
+                .resizable()
+                .renderingMode(.original)
+                .aspectRatio(contentMode: .fit)
+                .padding(.top, 10)
+                .padding(.leading, 10)
+                .background(Color(course.asset))
+            
+            HStack {
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(course.name)
+                        .fontWeight(.bold)
+                    
+                    Text("\(course.numCourse) Courses")
+                }
+                .foregroundColor(.black)
+                
+                Spacer(minLength: 0)
+            }
+            .padding()
+        }
+        .background(Color.white)
+        .cornerRadius(15)
     }
 }
 
@@ -82,6 +142,7 @@ struct Course : Identifiable {
     var asset : String
 }
 
+// both image and color name is same so i used common word asset
 var courses = [
     
     Course(name: "Coding", numCourse: 12, asset: "coding"),
